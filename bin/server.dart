@@ -28,6 +28,16 @@ import 'package:shelf_static/shelf_static.dart';
 
 
 
+
+
+
+
+
+
+
+
+
+
 import "package:redstone/server.dart" as app;
 
 main() 
@@ -39,8 +49,8 @@ main()
 
 
 //GET :: /hello
-@app.Route("/hello")
-String helloWorld() => "Hello, World!";
+@app.Route ("/hello")
+String helloWorld () => "Hello, World!";
 
 
 
@@ -66,8 +76,8 @@ String helloWorld() => "Hello, World!";
 
 
 
-@app.Route("/saludar/:nombre")
-String helloAlguien (String nombre) => "Hola $nombre!";
+@app.Route("/saludar/:nombre/:apellido")
+String helloAlguien (String nombre, String apellido) => "Hola $nombre $apellido!";
 
 
 
@@ -173,8 +183,6 @@ String helloAlguienConForm (@app.Body(app.FORM) QueryMap form)
 
 
 
-
-
 //JSON
 
 
@@ -216,35 +224,9 @@ String helloAlguienJson (@app.Body(app.JSON) QueryMap form)
 Usuario helloAlguienJsonMapper (@Decode() Usuario user)
 {
     user.clicks++;
-    
     return user;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@app.Route("/json")
-String helloJSON (String nombre)
-{
-  var l = new Iterable.generate(10)
-    .map((n) => '{"n": $n}')
-    .reduce((a,b) => "$a,\n$b");
-  
-  return "[$l]";
-}
 
 
 
@@ -276,6 +258,8 @@ otherConfig()
     );
     
     app.addPlugin(getMapperPlugin(dbManager));
+    //app.addPlugin(getMapperPlugin());
+    
     
     app.setShelfHandler (createStaticHandler
     (
