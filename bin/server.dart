@@ -1,10 +1,19 @@
 
+//QueryMap, permite utilizar un Map como si fuera un objeto de JS
 import "package:redstone/query_map.dart";
+//Pluggin para encode/decode JSON
 import 'package:redstone_mapper/plugin.dart';
+//class Usuario
 import 'package:taller/modelos/usuario.dart';
+//Pluggin de MongoDB para Redstone
 import 'package:redstone_mapper_mongo/manager.dart';
+
+//importar las rutas creadas en otros archivos para que redstone
+//las active en "app.start"
 import 'servicios_usuario.dart';
 import 'mongo.dart';
+
+//servir archivos staticos
 import 'package:shelf_static/shelf_static.dart';
 
 
@@ -29,7 +38,7 @@ main()
 }
 
 
-
+//GET :: /hello
 @app.Route("/hello")
 String helloWorld() => "Hello, World!";
 
