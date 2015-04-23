@@ -1,0 +1,28 @@
+<div>
+  <div ng-repeat="usuario in usuarios">
+    {{usuario.clicks}}
+    
+    <div ng-if="usuario.nombre == null">
+      Falta tu nombre.
+    </div>
+    
+    <div ng-if="usuario.nombre != null">
+      Hola {{usuario.nombre}} {{usuario.apellido}}
+    </div>
+    
+    <button ng-click="usuario.clicks = usuario.clicks + 1">Click</button>
+    
+    Descripcion: <input type="text" ng-model="usuario.descripcion">
+    
+    <button ng-click="mayus (usuario)">Mayusculas</button>
+    <button ng-click="minus (usuario)">Minusculas</button>
+    <br>
+    <button ng-click="actualizarUsuario (usuario)">Guardar</button>
+    <button ng-click="borrarUsuario (usuario)">Guardar</button>
+    <br>
+    <br>
+  </div>
+  <br>
+  <br>
+  <button ng-click="nuevoUsuario()">Nuevo Usuario</button>
+</div>
