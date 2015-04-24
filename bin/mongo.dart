@@ -1,11 +1,9 @@
 library mongo;
 
 import "package:redstone/server.dart" as app;
-import "package:redstone/query_map.dart";
 import 'package:redstone_mapper/plugin.dart';
 import 'package:taller/modelos/usuario.dart';
 import 'package:redstone_mapper_mongo/manager.dart';
-import 'package:redstone_mapper_mongo/service.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'dart:async';
 
@@ -32,7 +30,7 @@ import 'dart:async';
 
 @app.Route ('/holaMongo', methods: const [app.POST])
 @Encode()
-holaMongo (@app.Attr() MongoDb dbConn, @Decode() Usuario user) async
+Future<Usuario> holaMongo (@app.Attr() MongoDb dbConn, @Decode() Usuario user) async
 {
   user.id = new ObjectId().toHexString();
   
@@ -66,12 +64,11 @@ holaMongo (@app.Attr() MongoDb dbConn, @Decode() Usuario user) async
 
 //findOne
 
-@app.Route ('/testFind/:id', methods: const [app.POST])
+@app.Route ('/testFind/:id', methods: const [app.GET])
 @Encode()
 testFind (String id, @app.Attr() MongoDb dbConn) async
 {
-  var user = await dbConn.findOne('usuario', Usuario, {'_id': new ObjectId.fromHexString(id)});
-
+  var user = await dbConn.findOne('usuarios', Usuario, {'_id': new ObjectId.fromHexString(id)});
   return user;
 }
 
@@ -90,16 +87,15 @@ testFind (String id, @app.Attr() MongoDb dbConn) async
 
 //where
 
-@app.Route ('/testFind2/:id', methods: const [app.POST])
+@app.Route ('/testFind2/:id', methods: const [app.GET])
 @Encode()
 testFind2 (String id, @app.Attr() MongoDb dbConn) async
 {
   var user = await dbConn.findOne(
-    'usuario',
+    'usuarios',
     Usuario,
     where.id(new ObjectId.fromHexString(id))
   );
-
   return user;
 }
 
@@ -122,11 +118,11 @@ testFind2 (String id, @app.Attr() MongoDb dbConn) async
 
 //innerConn
 
-@app.Route ('/testFindMongoDart/:id', methods: const [app.POST])
+@app.Route ('/testFindMongoDart/:id', methods: const [app.GET])
 @Encode()
 testFindMongoDart (String id, @app.Attr() MongoDb dbConn) async
 {
-  var data = await dbConn.innerConn.collection('usuario')
+  var data = await dbConn.innerConn.collection('usuarios')
                                    .findOne(where.id(new ObjectId.fromHexString(id)));
   
   var user = dbConn.decode(data, Usuario);

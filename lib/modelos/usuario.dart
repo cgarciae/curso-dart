@@ -2,10 +2,12 @@ library modelos.usuario;
 
 import 'package:redstone_mapper/mapper.dart';
 import 'package:redstone_mapper_mongo/metadata.dart';
+import 'ref.dart';
 
-class Usuario
+class Usuario extends Ref
 {
-  @Id() String id;
+  //otro id
+  @ReferenceId() String otroId;
   
   @Field() String nombre;
   @Field() String apellido;

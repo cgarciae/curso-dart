@@ -6,12 +6,13 @@ import 'package:redstone_mapper_mongo/manager.dart';
 import 'package:redstone_mapper_mongo/service.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'dart:async';
+import 'core/db_service.dart';
 
 @app.Group ("/usuario")
 @Encode()
-class ServiciosUsuario extends MongoDbService<Usuario>
+class ServiciosUsuario extends DbService<Usuario>
 {
-    ServiciosUsuario () : super ("usuario");
+    ServiciosUsuario (MongoConnection db) : super ("usuario", db);
     
     @app.DefaultRoute (methods: const [app.POST])
     Nuevo () async

@@ -96,10 +96,5 @@ main ()
 }
 
 
-
-
-class ServiciosUsuarioMock extends Mock implements ServiciosUsuario
-{
-  
-}
+class ServiciosUsuarioMock extends Mock implements ServiciosUsuario {}
 
