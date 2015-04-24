@@ -38,7 +38,6 @@ Future<Usuario> holaMongo (@app.Attr() MongoDb dbConn, @Decode() Usuario user) a
   
   //Tambien accessible en:
   //app.request.attributes.dbConn;
-  
   return user;
 }
 

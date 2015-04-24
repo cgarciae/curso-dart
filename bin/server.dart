@@ -7,11 +7,14 @@ import 'package:redstone_mapper/plugin.dart';
 import 'package:taller/modelos/usuario.dart';
 //Pluggin de MongoDB para Redstone
 import 'package:redstone_mapper_mongo/manager.dart';
+//DI
+import 'package:di/di.dart';
 
 //importar las rutas creadas en otros archivos para que redstone
 //las active en "app.start"
 import 'servicios_usuario.dart';
 import 'mongo.dart';
+import 'core/db_service.dart';
 
 //servir archivos staticos
 import 'package:shelf_static/shelf_static.dart';
@@ -260,6 +263,9 @@ otherConfig()
     app.addPlugin(getMapperPlugin(dbManager));
     //app.addPlugin(getMapperPlugin());
     
+
+    app.addModule (new Module()
+      ..bind(MongoConnection));
     
     app.setShelfHandler (createStaticHandler
     (
