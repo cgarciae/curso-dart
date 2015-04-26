@@ -3,6 +3,7 @@ library mongo;
 import "package:redstone/server.dart" as app;
 import 'package:redstone_mapper/plugin.dart';
 import 'package:taller/modelos/usuario.dart';
+import 'package:redstone_mapper_mongo/service.dart';
 import 'package:redstone_mapper_mongo/manager.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'dart:async';
@@ -131,5 +132,31 @@ testFindMongoDart (String id, @app.Attr() MongoDb dbConn) async
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+//MongoDbService
+
+@app.Route ('/testFindConMongoServices/:id', methods: const [app.GET])
+@Encode()
+testFindConMongoServices (String id) async
+{
+  var userServices = new MongoDbService<Usuario>("usuarios");
+  
+  var user = await userServices.findOne(
+    where.id(new ObjectId.fromHexString(id))
+  );
+  
+  return user;
+}
 
 

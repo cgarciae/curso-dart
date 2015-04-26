@@ -1,7 +1,9 @@
 import "package:redstone/server.dart" as app;
 import "package:redstone/query_map.dart";
 import 'package:redstone_mapper/plugin.dart';
+import 'package:redstone_mapper/mapper.dart';
 import 'package:taller/modelos/usuario.dart';
+import 'package:taller/modelos/ref.dart';
 import 'package:redstone_mapper_mongo/manager.dart';
 import 'package:redstone_mapper_mongo/service.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -12,7 +14,10 @@ import 'core/db_service.dart';
 @Encode()
 class ServiciosUsuario extends DbService<Usuario>
 {
-    ServiciosUsuario (MongoConnection db) : super ("usuario", db);
+    ServiciosCommentarios serviciosCommentarios;
+    
+    ServiciosUsuario (this.serviciosCommentarios,
+                      MongoConnection db) : super ("usuario", db);
     
     @app.DefaultRoute (methods: const [app.POST])
     Nuevo () async
@@ -39,12 +44,28 @@ class ServiciosUsuario extends DbService<Usuario>
     @app.Route ("/:id/nombre", methods: const [app.PUT])
     CambiarNombre (String id, @app.QueryParam() nombre) async
     {
-      await mongoDb.update
+//      await mongoDb.update
+//      (
+//          collectionName,
+//          where.id(new ObjectId.fromHexString(id)),
+//          modify.set("nombre", nombre)
+//      );
+      
+//      this.collectionName;
+//      this.find()
+//      this.findOne()
+//      this.insert(obj)
+//      this.update(selector, obj)
+//      this.mongoDb //dbConn
+//      this.mongoDb.innerConn ==> Mongo Dart
+      
+      await update
       (
-          collectionName,
-          where.id(new ObjectId.fromHexString(id)),
-          modify.set("nombre", nombre)
-      );
+         where.id(new ObjectId.fromHexString(id)),
+         new Usuario()
+          ..nombre = nombre,
+         override: false
+       );
       
       return "OK";
     }
@@ -65,7 +86,7 @@ class ServiciosUsuario extends DbService<Usuario>
     @app.Route ("/:id", methods: const [app.DELETE])
     Eliminar (String id) async
     {
-      await this.remove
+      await remove
       (
           where.id(new ObjectId.fromHexString(id))
       );
@@ -78,4 +99,21 @@ class ServiciosUsuario extends DbService<Usuario>
     {
         return find ();
     }
+}
+
+@app.Group ('/commentarios')
+class ServiciosCommentarios
+{
+  @app.DefaultRoute ()
+  Get (@app.QueryParam() String idUsuario)
+  {
+    //buscar todos los commentarios del usuario
+    throw new UnimplementedError();
+  }
+}
+
+class Commentario extends Ref
+{
+  @Field() Usuario propietario;
+  @Field() String commentario;
 }

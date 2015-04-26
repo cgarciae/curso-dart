@@ -15,6 +15,7 @@ import 'package:di/di.dart';
 import 'servicios_usuario.dart';
 import 'mongo.dart';
 import 'core/db_service.dart';
+import 'group.dart';
 
 //servir archivos staticos
 import 'package:shelf_static/shelf_static.dart';
