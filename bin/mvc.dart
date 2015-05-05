@@ -141,7 +141,7 @@ viewControllerRoot() => new Example()
 
 
 
-@mvc.ControllerGroup('/info', root: '/lib')
+@mvc.GroupController('/info', root: '/lib')
 class ExampleService1 {
 
   @mvc.ViewController ('/A')
@@ -167,7 +167,7 @@ class ExampleService1 {
 
 
 
-@mvc.ControllerGroup('/info2', root: '/lib')
+@mvc.GroupController('/info2', root: '/lib')
 class ExampleService2
 {
   @mvc.ViewController ('/A', filePath: '/template')
