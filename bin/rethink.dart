@@ -15,7 +15,8 @@ main() async {
   app.setupConsoleLog();
 
   await setupRethink(new ConfigRethink(
-      host: "192.168.59.103",
+      host: "104.131.109.228",
+      port: 7272,
       db: "arista",
       tables: ["usuarios", "eventos", "vistas"]
   ));

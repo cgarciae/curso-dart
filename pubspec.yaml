@@ -14,7 +14,7 @@ dependencies:
   redstone_mapper_mongo: any
   redstone_mvc: any
   redstone_utilities: any
-  route_hierarchical: '>=0.5.0 <0.7.0'
+  route_hierarchical: any
   shelf: any
   shelf_static: any
   unittest: any
