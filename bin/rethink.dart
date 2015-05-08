@@ -12,37 +12,19 @@ main() async {
   app.addPlugin(mvc.mvcPluggin);
   app.addPlugin(getMapperPlugin());
   app.addPlugin(rethinkPlugin(manager));
-
   app.setupConsoleLog();
 
-  await app.start(port: 9090);
+  await setupRethink(new ConfigRethink(
+      host: "192.168.59.103",
+      db: "arista",
+      tables: ["usuarios", "eventos", "vistas"]
+  ));
 
-  Connection conn = await r.connect(host: "192.168.59.103", db: "arista");
-  await setup(dbSetup["arista"], conn);
   print("setup complete");
+
+  await app.start(port: 9090);
 }
 final Rethinkdb r = new Rethinkdb();
-
-var dbSetup = {
-  "arista": {"name": "arista", "tables": ["usuarios", "eventos", "vistas"]}
-};
-
-setup(Map info, Connection conn) async {
-  var dbName = info["name"];
-  if (!await r.dbList().contains(dbName).run(conn)) {
-    await r.dbCreate(dbName).run(conn);
-    print('Created db: $dbName');
-  }
-  conn.use(dbName);
-
-  List tables = await r.db(dbName).tableList().run(conn);
-  for (var table in info["tables"]) {
-    if (!tables.contains(table)) {
-      await r.tableCreate(table).run(conn);
-      print('Created table: $table');
-    }
-  }
-}
 
 class User {
   @Field() String id;
@@ -77,7 +59,7 @@ form() => {};
 form2() => {};
 
 @mvc.DataController('/rethink',
-    methods: const [app.POST], allowMultipartRequest: true)
+methods: const [app.POST], allowMultipartRequest: true)
 rethink(@app.Attr("dbConn") Connection conn, @Decode(
     from: const [app.FORM]) User user) async {
   user.id = await r.uuid().run(conn);
@@ -97,46 +79,43 @@ all(String id, @app.Attr("dbConn") Connection conn) async {
   return ((await r.table('usuarios').run(conn)) as Cursor).toArray();
 }
 
-
 @mvc.GroupController('/api/usuarios/v1')
 class ServiciosUsuario extends RethinkServices<User> {
   ServiciosUsuario() : super('usuarios');
 
   @mvc.DataController('/:id')
-  Future<User> GET (String id) async {
+  Future<User> GET(String id) async {
     User user = await getNow(id);
-    if (user == null)
-      throw new app.ErrorResponse (404, {"error": "User not found"});
+    if (user == null) throw new app.ErrorResponse(
+        404, {"error": "User not found"});
 
     return decode(user, User);
   }
 
-
-  @mvc.DataController('/:id', methods: const[app.PUT])
-  Future<User> PUT (String id, @Decode(from: const[app.JSON, app.FORM]) User delta) async {
+  @mvc.DataController('/:id', methods: const [app.PUT])
+  Future<User> PUT(
+      String id, @Decode(from: const [app.JSON, app.FORM]) User delta) async {
     delta.id = null;
 
     Map resp = await updateNow(id, delta);
 
-    if (resp['replaced'] == 0)
-      throw new app.ErrorResponse (304, {"error": "User not in database"});
+    if (resp['replaced'] == 0) throw new app.ErrorResponse(
+        304, {"error": "User not in database"});
 
     return GET(id);
   }
 
-  @mvc.DataController('/:id', methods: const[app.DELETE])
-  Future<Map> DELETE (String id) async {
-
+  @mvc.DataController('/:id', methods: const [app.DELETE])
+  Future<Map> DELETE(String id) async {
     Map resp = await deleteNow(id);
-    if (resp['deleted'] == 0)
-      throw new app.ErrorResponse (501, {"error": "User not in database"});
+    if (resp['deleted'] == 0) throw new app.ErrorResponse(
+        501, {"error": "User not in database"});
 
     return {"id": id};
   }
 
-  @mvc.DefaultDataController (methods: const [app.POST])
-  Future<User> POST (@Decode() User user) async {
-
+  @mvc.DefaultDataController(methods: const [app.POST])
+  Future<User> POST(@Decode() User user) async {
     var resp = await insertNow(user);
     user.id = resp["generated_keys"].first;
 
