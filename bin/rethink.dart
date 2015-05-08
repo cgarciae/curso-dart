@@ -59,7 +59,7 @@ form() => {};
 form2() => {};
 
 @mvc.DataController('/rethink',
-methods: const [app.POST], allowMultipartRequest: true)
+    methods: const [app.POST], allowMultipartRequest: true)
 rethink(@app.Attr("dbConn") Connection conn, @Decode(
     from: const [app.FORM]) User user) async {
   user.id = await r.uuid().run(conn);
@@ -69,7 +69,8 @@ rethink(@app.Attr("dbConn") Connection conn, @Decode(
   return user;
 }
 
-@mvc.ViewController('/all', template: '''
+@mvc.ViewController('/all', template:
+'''
 {{#.}}
   <h3>{{lastname}}, {{firstname}}</h3>
   <p>{{id}}</p>
@@ -78,6 +79,7 @@ rethink(@app.Attr("dbConn") Connection conn, @Decode(
 all(String id, @app.Attr("dbConn") Connection conn) async {
   return ((await r.table('usuarios').run(conn)) as Cursor).toArray();
 }
+
 
 @mvc.GroupController('/api/usuarios/v1')
 class ServiciosUsuario extends RethinkServices<User> {
@@ -88,8 +90,7 @@ class ServiciosUsuario extends RethinkServices<User> {
     User user = await getNow(id);
     if (user == null) throw new app.ErrorResponse(
         404, {"error": "User not found"});
-
-    return decode(user, User);
+    return user;
   }
 
   @mvc.DataController('/:id', methods: const [app.PUT])

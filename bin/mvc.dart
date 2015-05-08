@@ -170,12 +170,12 @@ class ExampleService1 {
 @mvc.GroupController('/info2', root: '/lib')
 class ExampleService2
 {
-  @mvc.ViewController ('/A', filePath: '/template')
+  @mvc.ViewController('/A', filePath: '/template')
   viewA () => new Example()
     ..title = "Route A"
     ..description = "Some description of A";
 
-  @mvc.ViewController ('/B', filePath: '/template')
+  @mvc.ViewController('/B', filePath: '/template')
   viewB () => new Example()
     ..title = "Route B"
     ..description = "Some description of B";

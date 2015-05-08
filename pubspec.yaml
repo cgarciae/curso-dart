@@ -21,7 +21,6 @@ dependencies:
   rethinkdb_driver: any
   redstone_rethinkdb: any
 transformers:
-- script_inliner
 - redstone_mapper
 - angular:
     html_files:
