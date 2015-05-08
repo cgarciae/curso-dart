@@ -7,7 +7,7 @@ import 'package:redstone_rethinkdb/redstone_rethinkdb.dart';
 import 'dart:async';
 
 main() async {
-  RethinkDbManager manager = new RethinkDbManager("192.168.59.103", "arista");
+  RethinkDbManager manager = new RethinkDbManager("104.131.109.228", "arista");
 
   app.addPlugin(mvc.mvcPluggin);
   app.addPlugin(getMapperPlugin());
